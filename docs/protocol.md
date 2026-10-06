@@ -108,7 +108,7 @@ Claim-bearing results are semantic rows and counts. Timing and memory are descri
 - representative source/evidence pairs for two cases per family
 - `results/observed/*.csv` and `*-summary.json` for the finite kernel
 
-Those `framework-observed` paths preserve the historical source campaign. The current `results/framework-replay/` reruns the same workload with structured declaration identities and catalog-decoded reuse. It records 5,220/6,518 semantically reused nodes (80.09%), 2,919,349 checker steps, 2,289,440 graph operations, 51.578 process CPU seconds, 54.328 wall seconds and 46.73 MiB peak Windows working set, one worker and zero downloads. The earlier source timings (17.399 CPU seconds, 17.403 wall seconds, 117.17 MiB RSS) are not observations of revised code. The historical finite kernel records 16.318 CPU seconds and 117.17 MiB peak RSS. These are descriptive observations, not comparative performance claims.
+Those `framework-observed` paths preserve the historical source campaign. The retained `results/framework-replay/` uses structured declaration identities and catalog-decoded reuse. It records 5,220/6,518 semantically reused nodes (80.09%), 2,919,349 checker steps, 2,289,440 graph operations, 51.578 process CPU seconds, 54.328 wall seconds and 46.73 MiB peak Windows working set, one worker and zero downloads. These timings precede the emission-limit and weighted-boundary changes. The older source timings (17.399 CPU seconds, 17.403 wall seconds, 117.17 MiB RSS) are not observations of semantic-catalog code. The historical finite kernel records 16.318 CPU seconds and 117.17 MiB peak RSS. These are descriptive observations, not comparative performance claims.
 
 ## 7. Inclusion, exclusion, and non-claims
 

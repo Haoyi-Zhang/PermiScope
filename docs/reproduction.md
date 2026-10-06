@@ -17,7 +17,7 @@ From the standalone repository root:
 python -m unittest discover -s tests -v
 ```
 
-Expected: 75 tests and final status `OK`. Run the same command with `python -O` as a second control; correctness checks do not rely on removable `assert` statements. The exact duration is machine-dependent. Tests also cover dotted declaration collisions, semantic token remapping, changed permissions/classes, invalid certificate reasons/order, source core closure counts, and acceptance of all six retained scale certificates.
+Expected: 84 tests and final status `OK`. Run the same command with `python -O` as a second control; correctness checks do not rely on removable `assert` statements. The exact duration is machine-dependent. Tests also cover dotted declaration collisions, semantic token remapping, changed permissions/classes, invalid certificate reasons/order, source core closure counts, acceptance of all six retained scale certificates, early emission bounds, large integer distances, and iterative occurrence traversal.
 
 ## 2. Reproduce the finite ground campaign
 
@@ -55,7 +55,7 @@ Expected summary:
 
 `compare_framework_results.py` excludes timing and process RSS but compares semantic summaries, all CSV rows, and representative evidence files.
 
-`results/framework-replay` contains the current source-campaign output. `results/framework-observed` is the unchanged historical local-token campaign, not a valid byte-equality baseline or current-format certificate package. Comparisons against it are expected to differ. Source-campaign resource limits use POSIX facilities when available; on Windows, the summary explicitly records unavailable OS limits and measures the process peak working set. Source/ground size bounds and the fixed workload apply on both platforms. The ground reproduction driver still requires POSIX `resource`; its historical outputs were reconciled, not rerun on Windows.
+`results/framework-replay` is the retained semantic-catalog baseline. Its timings precede the emission and weighted-boundary changes; they are not measurements of those changes. `results/framework-observed` is the unchanged historical local-token campaign, not a valid byte-equality baseline or current-format certificate package. Comparisons against it are expected to differ. Both campaign drivers use POSIX resource limits when available. On Windows these OS limits are unavailable and the memory field measures peak working set, not Linux RSS. Source/ground bounds and the fixed workload apply on both platforms; run commands under an external timeout when OS limits are unavailable. The ground driver now supports this Windows path as well.
 
 ## 4. Check one source/evidence pair
 
