@@ -210,3 +210,13 @@ are not rewritten.
 The retained ground scale times are end-to-end wall observations including input construction, extraction, validation and JSON output. At 12,800 atoms, the 190.4 ms unseeded row accepts an empty certificate; the 212.0 ms seeded row accepts a complete certificate on a different input. No empty-certificate rejection time is reported. The source site-core checker performs `u+k+2 <= 2u+2` closures, including its final sufficiency/minimality audits.
 
 Project code and owned inputs are MIT licensed. The retained AOSP excerpts remain under Apache License 2.0; the license text and an integration notice are in `third_party/aosp/`. No upstream analyzer implementation is vendored or modified. Scholarly papers and publisher templates are referenced but not redistributed in this standalone repository.
+
+## Manuscript diagrams
+
+The model and protocol schematics are drawn directly in Python as vector PDFs
+with embedded STIX fonts. They encode the stated relationships, not measured
+performance. To regenerate them with Python 3.9+ and Matplotlib:
+
+```sh
+python -B figures/draw_schematics.py --output figures
+```
