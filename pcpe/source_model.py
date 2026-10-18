@@ -393,6 +393,9 @@ def _validate_semantics(program: SourceProgram) -> None:
     for cls in program.classes:
         if cls.super is not None and cls.super not in classes:
             raise ValueError("unknown super class")
+    # Check every parent before traversing any chain: class declaration order
+    # must not turn an invalid ancestor into an uncaught lookup exception.
+    for cls in program.classes:
         # cycle check
         seen: set[str] = set()
         cur: str | None = cls.name
