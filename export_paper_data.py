@@ -15,6 +15,76 @@ from pathlib import Path
 from reconcile import reconcile
 
 
+PUBLIC_OPERATIONS = {
+    "vibrator-cancel": "Vibrator: cancel",
+    "vibrator-is-vibrating": "Vibrator: is vibrating",
+    "vibrator-register-listener": "Vibrator: register listener",
+    "vibrator-set-always-on": "Vibrator: set always on",
+    "vibrator-unregister-listener": "Vibrator: unregister listener",
+    "vibrator-vibrate-internal": "Vibrator: vibrate internal",
+    "wallpaper-clear": "Wallpaper: clear",
+    "wallpaper-dimension-hints": "Wallpaper: dimension hints",
+    "wallpaper-display-padding": "Wallpaper: display padding",
+    "wallpaper-lock-callback": "Wallpaper: lock callback",
+    "wallpaper-set-dim": "Wallpaper: set dim",
+    "wallpaper-set": "Wallpaper: set",
+}
+
+FAULT_MUTATIONS = {
+    "source-duplicate-statement": "Duplicate statement",
+    "source-unknown-super": "Unknown superclass",
+    "source-inheritance-cycle": "Inheritance cycle",
+    "source-duplicate-class": "Duplicate class",
+    "source-unknown-field-type": "Unknown field type",
+    "source-override-signature": "Invalid override signature",
+    "source-service-subtype": "Invalid service subtype",
+    "source-entry-arity": "Invalid entry arity",
+    "source-unknown-permission": "Unknown permission",
+    "source-unknown-variable": "Unknown receiver variable",
+    "source-invalid-field": "Invalid field",
+    "source-unsupported-candidate": "Unsupported candidate",
+    "evidence-schema": "Invalid evidence schema",
+    "lower-schema": "Invalid lower schema",
+    "upper-schema": "Invalid upper schema",
+    "lower-ir-omission": "Lower-IR omission",
+    "lower-program-query": "Altered lower-program query",
+    "lower-coverage-count": "Altered lower coverage count",
+    "lower-certificate-omission": "Lower-certificate omission",
+    "lower-certificate-reason": "Altered lower-certificate reason",
+    "upper-ir-origin": "Altered upper-IR origin",
+    "upper-program-fact": "Altered upper-program fact",
+    "upper-minimum-distance": "Altered minimum distance",
+    "classification-mutation": "Altered classification",
+}
+
+FAULT_REJECTIONS = {
+    "source-duplicate statement id": "Duplicate statement identifier",
+    "source-unknown super class": "Unknown superclass",
+    "source-inheritance cycle": "Inheritance cycle",
+    "source-duplicate class": "Duplicate class",
+    "source-unknown field type": "Unknown field type",
+    "source-override signature": "Invalid override signature",
+    "source-service implementation subtype": "Invalid service implementation subtype",
+    "source-entry arity": "Invalid entry arity",
+    "source-unknown permission": "Unknown permission",
+    "source-unknown invoke receiver": "Unknown invocation receiver",
+    "source-load field": "Invalid load field",
+    "source-statement 3:0:6 candidate unsupported op": "Unsupported operation at statement 3:0:6",
+    "evidence-schema": "evidence schema",
+    "lower-schema": "lower schema",
+    "upper-schema": "upper schema",
+    "lower-ir-mismatch": "lower IR mismatch",
+    "lower-program-mismatch": "lower program mismatch",
+    "lower-coverage-mismatch": "lower coverage mismatch",
+    "lower-certificate-closure-violation": "lower certificate closure violation",
+    "lower-certificate-wrong-head": "lower certificate wrong head",
+    "upper-ir-mismatch": "upper IR mismatch",
+    "upper-program-mismatch": "upper program mismatch",
+    "upper-minimum-witness-cost": "upper minimum witness cost",
+    "classification-mismatch": "classification mismatch",
+}
+
+
 def _read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
@@ -104,7 +174,7 @@ def export(kernel: Path, framework: Path, out: Path) -> None:
     )
 
     _write_table(
-        out / "resource-table.tex", "lr", r"Metric & Retained value",
+        out / "resource-table.tex", "lr", r"Metric & Source replay value",
         [
             f"Maximum methods / statements & {fs['maxima']['methods']:,} / {fs['maxima']['statements']:,}",
             f"Maximum atoms / rules & {fs['maxima']['upper_atoms']:,} / {fs['maxima']['upper_rules']:,}",
@@ -184,27 +254,40 @@ def export(kernel: Path, framework: Path, out: Path) -> None:
         ],
     )
 
-    def breakable_mono(value: str) -> str:
-        value = value.replace("_", r"\_")
+    scale_rows = []
+    for atoms in (128, 1280, 12800):
+        for seeded in (0, 1):
+            item = chunks[f"scale-{atoms}-{seeded}"]
+            scale_rows.append(
+                f"{item['atoms']:,} & {item['initial_facts']:,} & "
+                f"{item['premise_incidences']:,} & {item['proof_nodes']:,} & "
+                f"{item['encoded_certificate_bytes']:,} & {1000 * item['wall_seconds']:.1f}"
+            )
+    _write_table(
+        out / "scale-table.tex", "rrrrrr",
+        r"Atoms & Seeds & Incidences & Nodes & Cert. bytes & Time (ms)", scale_rows,
+    )
+
+    def breakable_text(value: str) -> str:
+        value = value.replace("_", r"\_\allowbreak{}")
         value = value.replace("ManagerService", r"Manager\allowbreak{}Service")
         value = value.replace("-", r"-\allowbreak{}")
-        return r"\texttt{" + value + "}"
+        return r"\textnormal{" + value + "}"
 
     public_rows = []
     for row in public:
         location = f"{row['path'].split('/')[-1]}:{row['start_line']}--{row['end_line']}"
         perm = row["permission"].replace("android.permission.", "")
         public_rows.append(
-            f"{breakable_mono(row['id'])} & {breakable_mono(location)} & {breakable_mono(perm)}"
+            f"{PUBLIC_OPERATIONS[row['id']]} & {breakable_text(location)} & {breakable_text(perm)}"
         )
     _write_table(out / "public-table.tex", "p{0.24\\linewidth}p{0.39\\linewidth}p{0.27\\linewidth}",
-                 r"Identifier & Retained lines & Primitive", public_rows)
+                 r"Operation & Retained lines & Primitive", public_rows)
 
     fault_rows = []
     for row in faults:
-        reason = row["observed_reason"].replace("_", r"\\_")
         fault_rows.append(
-            f"{row['case']} & \\texttt{{{row['mutation']}}} & \\texttt{{{reason}}}"
+            f"{row['case']} & {FAULT_MUTATIONS[row['mutation']]} & {FAULT_REJECTIONS[row['observed_reason']]}"
         )
     _write_table(out / "framework-fault-table.tex", "lll", r"Case & Mutation & First rejection", fault_rows)
 
