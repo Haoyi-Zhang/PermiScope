@@ -20,7 +20,7 @@ The retained source-level campaign contains exactly 336 cases: 300 deterministic
 
 ## What it does not establish
 
-This is not a Java, bytecode, native, or production Android frontend. It does not claim sound handling of reflection, dynamic loading, callbacks, lifecycle behavior, exceptions, concurrency, native enforcement, policy intent, vendor forks, or real-device behavior. The 12 AOSP records validate only their retained source lines, one narrow lexical permission primitive, provenance, and a separately supplied BFIL-1 projection. They are not whole-method or whole-framework analyses.
+The closed Java bridge below is not a general Java, bytecode, native, or production Android frontend. It does not claim sound handling of reflection, dynamic loading, callbacks, lifecycle behavior, exceptions, concurrency, native enforcement, policy intent, vendor forks, or real-device behavior. The 12 AOSP records validate only their retained source lines, one narrow lexical permission primitive, provenance, and a separately supplied BFIL-1 projection. They are not whole-method or whole-framework analyses.
 
 The checker is structurally separate from the producer but was developed in the same research effort. The strict parser/type resolver and the BFIL-1 semantics are the declared trusted computing base. The general arguments are handwritten, not proof-assistant checked or independently audited.
 
@@ -52,7 +52,7 @@ The checker is structurally separate from the producer but was developed in the 
 
 ## Quick verification
 
-Run from this repository root with Python 3.11 or later. The implementation uses only the Python standard library.
+The core runs from this repository root with Python 3.11+ and its standard library. The separate closed Java bridge requires an installed JDK 17+; its explicit CI tests use Python 3.12 and JDK 17. No JDK is needed for the existing Python-only core suite.
 
 ```bash
 python -B -m unittest discover -s tests -v
@@ -220,3 +220,6 @@ performance. To regenerate them with Python 3.9+ and Matplotlib:
 ```sh
 python -B figures/draw_schematics.py --output figures
 ```
+## Whole-unit Java source bridge
+
+The closed Java profile adds complete-unit parsing and type analysis before BFIL evidence checking. It does not replace the BFIL, Python-owned or AOSP-excerpt studies. With an installed JDK 17+, run the two explicit JDK test modes and native replay described in docs/java-profile.md. The eight owned units and four stale-source controls have retained source/projection/evidence/native-event records in results/java-bridge. The main paper directly consumes the checked table. No arbitrary external Java or AOSP code is executed.

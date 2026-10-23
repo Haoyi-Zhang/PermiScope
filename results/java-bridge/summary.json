@@ -1,0 +1,77 @@
+{
+  "native_runs": 8,
+  "new_source_omissions_rejected": 4,
+  "rows": [
+    {
+      "after_native_permissions": [
+        "P_A",
+        "P_B"
+      ],
+      "after_statements": 3,
+      "before_native_permissions": [
+        "P_A"
+      ],
+      "before_statements": 2,
+      "chain_methods": 1,
+      "proof_only_on_old_program": true,
+      "same_literal_inventory": true,
+      "stale_projection_on_new_java": false,
+      "stale_reason": "lower-ir-mismatch",
+      "total_methods": 2
+    },
+    {
+      "after_native_permissions": [
+        "P_A",
+        "P_B"
+      ],
+      "after_statements": 6,
+      "before_native_permissions": [
+        "P_A"
+      ],
+      "before_statements": 5,
+      "chain_methods": 4,
+      "proof_only_on_old_program": true,
+      "same_literal_inventory": true,
+      "stale_projection_on_new_java": false,
+      "stale_reason": "lower-ir-mismatch",
+      "total_methods": 5
+    },
+    {
+      "after_native_permissions": [
+        "P_A",
+        "P_B"
+      ],
+      "after_statements": 18,
+      "before_native_permissions": [
+        "P_A"
+      ],
+      "before_statements": 17,
+      "chain_methods": 16,
+      "proof_only_on_old_program": true,
+      "same_literal_inventory": true,
+      "stale_projection_on_new_java": false,
+      "stale_reason": "lower-ir-mismatch",
+      "total_methods": 17
+    },
+    {
+      "after_native_permissions": [
+        "P_A",
+        "P_B"
+      ],
+      "after_statements": 66,
+      "before_native_permissions": [
+        "P_A"
+      ],
+      "before_statements": 65,
+      "chain_methods": 64,
+      "proof_only_on_old_program": true,
+      "same_literal_inventory": true,
+      "stale_projection_on_new_java": false,
+      "stale_reason": "lower-ir-mismatch",
+      "total_methods": 65
+    }
+  ],
+  "semantics": "Permission-event sets on owned acyclic final classes; not Android enforcement",
+  "source_units": 8,
+  "trusted_boundary": "Installed JDK parser/type checker, closed profile mapping, owned Permission event primitive"
+}

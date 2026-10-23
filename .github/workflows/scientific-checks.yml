@@ -50,6 +50,16 @@ jobs:
           run framework-compare python -B compare_framework_results.py results/framework-replay "$RAW/framework"
           run tables python -B export_paper_data.py results/observed --framework results/framework-replay --out "$RAW/paper-data"
           CHECKS
+      - name: Reproduce the closed Java source bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          export JAVA_HOME="$JAVA_HOME_17_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          python -B -m unittest discover -s tests/java_bridge -v
+          python -B -O -m unittest discover -s tests/java_bridge -v
+          python -B run_java_bridge.py --out "$RUNNER_TEMP/p005-java-bridge" --compare results/java-bridge
+          python -B export_java_table.py
       - name: Retain raw output even after failure
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
